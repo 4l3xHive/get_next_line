@@ -11,38 +11,82 @@
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
-int len(char *s)
+size_t  ft_strlenni(char *s)
 {
-    int len = 0;
+    size_t len = 0;
     while (s[len])
-    {
         len++;
-    }
     return (len);
 }
 
-char    *get_next_line(int fd)
+char *ft_strjoinni(char *first, char *last)
 {
-    if (!fd || !BUFFER_SIZE)
-        return (NULL);
-    ssize_t  bytes_read;
-    static  char buffer[BUFFER_SIZE];
-    bytes_read = 0;;
-    while (TRUE)
-    {
-        bytes_read = read(fd, buffer, BUFFER_SIZE);
-        if (bytes_read < 0)
-            break; 
-    }
+    char *answ;
+    size_t total_len;
 
+    total_len = ft_strlenni(first) + ft_strlenni(last);
+    answ = (char *)malloc(sizeof(char) * (total_len + 1));
+    if (!answ)
+        return (NULL);
+    size_t i = 0;
+    while (*first)
+        answ[i++] = *first++;
+    while (*last)
+        answ[i++] = *last++;
+    answ[i] = '\0';
+    return answ;
 }
 
 
-int main(int ac, char **av)
+int ft_check_nl(char *read_buffer)
 {
-    int fd = open("test/test1", O_RDONLY);
-    char *line = get_next_line(fd);
-    write(1, line, len(line));
-    return 0;
+    int i;
+
+    i = 0;
+    if (!read_buffer)
+        return (0);
+    while (read_buffer[i])
+    {
+        if (read_buffer[i] == '\n')
+            return (1);
+        i++;
+    }
+    return (0);
+}
+
+char	*ft_strchrri(const char *s, int c)
+{
+	char	*ret;
+	char	ch;
+
+	ret = (char *)s;
+	ch = (char)c;
+	while (*ret)
+	{
+		if (*ret == ch)
+			return (ret);
+		ret++;
+	}
+	if (ch == '\0')
+		return (ret);
+	return (NULL);
+}
+
+
+
+
+char    *ft_strduppi(char *s)
+{
+    char    *ret;
+
+    ret = (char *)malloc(sizeof(char) * ft_strlenni(s) + 1);
+    if (!ret)
+        return (NULL);
+
+    while (*s)
+        *ret++ = *s++;
+    *ret = '\0';
+    return (ret);
 }
