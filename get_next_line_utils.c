@@ -15,7 +15,11 @@
 
 size_t  ft_strlenni(char *s)
 {
-    size_t len = 0;
+    size_t len;
+
+    len = 0;
+    if (!s)
+        return (0);
     while (s[len])
         len++;
     return (len);
@@ -23,26 +27,32 @@ size_t  ft_strlenni(char *s)
 
 char *ft_strjoinni(char *first, char *last)
 {
-    char *answ;
-    size_t total_len;
+    char    *answ;
+    size_t  total_len;
+    size_t  j;
+    size_t  i;
 
+    if (!first || !last)
+        return (NULL);
+    i = 0;
+    j = 0;
     total_len = ft_strlenni(first) + ft_strlenni(last);
     answ = (char *)malloc(sizeof(char) * (total_len + 1));
     if (!answ)
         return (NULL);
-    size_t i = 0;
-    while (*first)
-        answ[i++] = *first++;
-    while (*last)
-        answ[i++] = *last++;
+    while (first[j])
+        answ[i++] = first[j++];
+    j = 0;
+    while (last[j])
+        answ[i++] = last[j++];
     answ[i] = '\0';
-    return answ;
+    return (answ);
 }
 
 
 int ft_check_nl(char *read_buffer)
 {
-    int i;
+    size_t i;
 
     i = 0;
     if (!read_buffer)
