@@ -37,7 +37,11 @@ static char	*ft_next_spot(char *buffer)
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
     if (!buffer[i])
+	{
+		if (buffer)
+			free(buffer);
         return (NULL);
+	}
 	line_size = ft_strlenni(buffer) - i + 1;
 	newline = malloc(line_size * sizeof(char) + 1);
 	if (!newline)
@@ -80,7 +84,7 @@ static char	*ft_read_file(int fd, char *s_buffer)
 	ssize_t		bytes_read;
 
 	read_buffer = NULL;
-	bytes_read = 0;
+	bytes_read = 1;
 	if (!s_buffer)
 	{
 		s_buffer = malloc(1);
@@ -94,7 +98,6 @@ static char	*ft_read_file(int fd, char *s_buffer)
 		free(s_buffer);
 		return (NULL);
 	}
-	bytes_read = 1;
 	while (bytes_read > 0)
 	{
 		bytes_read = read(fd, read_buffer, BUFFER_SIZE);
@@ -104,6 +107,8 @@ static char	*ft_read_file(int fd, char *s_buffer)
 			free(read_buffer);
 			return (NULL);
 		}
+		read_buffer[bytes_read] = '\0';
+		//printf("len --> %d\n", ft_strlenni(read_buffer));
 		if (bytes_read > 0)
 		{
 			read_buffer[bytes_read] = '\0';
@@ -124,13 +129,7 @@ char	*get_next_line(int fd)
 	char			*line;
 
 	line = NULL;
-	if (fd < 0 || BUFFER_SIZE <= 0)
-	{
-		if (buffer)
-			free(buffer);
-		return (NULL);
-	}
-	if (read(fd, 0, 0) < 0)
+	if ((fd < 0 || BUFFER_SIZE <= 0) || read(fd, 0, 0) < 0)
 	{
 		if (buffer)
 			free(buffer);
@@ -153,7 +152,7 @@ char	*get_next_line(int fd)
 	return (line);
 }
 
-/*
+
 int main(int ac, char **av)
 {
     (void)ac;
@@ -162,13 +161,21 @@ int main(int ac, char **av)
 
     line = NULL;
      line = get_next_line(fd);
-    // printf("\n");
     write(1, line, ft_strlenni(line));
-    line = get_next_line(fd);
-    write(1, line, ft_strlenni(line));
+
+
+
+
+	free(line);
+   line = get_next_line(fd);
+	 write(1, line, ft_strlenni(line));
+	    line = get_next_line(fd);
+	 write(1, line, ft_strlenni(line));
+	    line = get_next_line(fd);
+	 write(1, line, ft_strlenni(line));
     
-    //line = get_next_line(fd);
-    //write(1, line, ft_strlenni(line));
+   // line = get_next_line(fd);
+   // write(1, line, ft_strlenni(line));
     
     //line = get_next_line(fd);
    // write(1, line, ft_strlenni(line));
@@ -180,7 +187,42 @@ int main(int ac, char **av)
     return 0;
 }
 
+char	*get_next_line(int fd)
+{
+	static char		*buffer;
+	char			*line;
 
+	line = NULL;
+	if ((fd < 0 || BUFFER_SIZE <= 0) || read(fd, 0, 0) < 0)
+	{
+		if (buffer)
+			free(buffer);
+		return (NULL);
+	}
+	buffer = ft_read_file(fd, buffer);
+	if (!buffer)
+		return (NULL);
+
+	// Check for both newline and end of file
+	if (*buffer || buffer[ft_strlenni(buffer)] != '\n')
+	{
+		line = ft_getline(buffer);
+		if (!line)
+		{
+			free(buffer);
+			buffer = NULL;
+			return (NULL);
+		}
+		buffer = ft_next_spot(buffer);
+		return (line);
+	}
+	free(buffer);
+	buffer = NULL;
+	return (NULL);
+}
+
+
+/*
 
 
 	title("files/41_no_nl: ")

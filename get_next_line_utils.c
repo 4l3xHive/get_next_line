@@ -18,10 +18,11 @@ size_t  ft_strlenni(char *s)
     size_t len;
 
     len = 0;
-    if (!s)
-        return (0);
-    while (s[len])
-        len++;
+    if (s != NULL)
+    {
+        while (s[len])
+            len++;
+    }
     return (len);
 }
 
