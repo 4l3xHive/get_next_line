@@ -6,7 +6,7 @@
 /*   By: apyykone <apyykone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 16:03:05 by apyykone          #+#    #+#             */
-/*   Updated: 2023/11/11 18:14:57 by apyykone         ###   ########.fr       */
+/*   Updated: 2023/11/13 13:40:42 by apyykone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ static char	*ft_next_spot(char *buffer)
 	while (buffer[i])
 		newline[j++] = buffer[i++];
 	newline[j] = '\0';
+	if (buffer)
+		free(buffer);
 	return (newline);
 }
 
@@ -108,7 +110,6 @@ static char	*ft_read_file(int fd, char *s_buffer)
 			return (NULL);
 		}
 		read_buffer[bytes_read] = '\0';
-		//printf("len --> %d\n", ft_strlenni(read_buffer));
 		if (bytes_read > 0)
 		{
 			read_buffer[bytes_read] = '\0';
@@ -131,6 +132,7 @@ char	*get_next_line(int fd)
 	line = NULL;
 	if ((fd < 0 || BUFFER_SIZE <= 0) || read(fd, 0, 0) < 0)
 	{
+		//printf("should\n");
 		if (buffer)
 			free(buffer);
 		return (NULL);
@@ -149,10 +151,11 @@ char	*get_next_line(int fd)
 		return (NULL);
 	}
 	buffer = ft_next_spot(buffer);
+		//printf("hhh\n");
 	return (line);
 }
 
-
+/*
 int main(int ac, char **av)
 {
     (void)ac;
@@ -160,19 +163,19 @@ int main(int ac, char **av)
     char *line;
 
     line = NULL;
-     line = get_next_line(fd);
-    write(1, line, ft_strlenni(line));
+   //  line = get_next_line(fd);
+  //  write(1, line, ft_strlenni(line));
 
-
-
-
-	free(line);
    line = get_next_line(fd);
 	 write(1, line, ft_strlenni(line));
-	    line = get_next_line(fd);
+	 if (!line)
+	 	printf("got\n");
+	   line = get_next_line(fd);
 	 write(1, line, ft_strlenni(line));
-	    line = get_next_line(fd);
-	 write(1, line, ft_strlenni(line));
+	 //   line = get_next_line(fd);
+	// write(1, line, ft_strlenni(line));
+	 //   line = get_next_line(fd);
+	// write(1, line, ft_strlenni(line));
     
    // line = get_next_line(fd);
    // write(1, line, ft_strlenni(line));
@@ -187,42 +190,6 @@ int main(int ac, char **av)
     return 0;
 }
 
-char	*get_next_line(int fd)
-{
-	static char		*buffer;
-	char			*line;
-
-	line = NULL;
-	if ((fd < 0 || BUFFER_SIZE <= 0) || read(fd, 0, 0) < 0)
-	{
-		if (buffer)
-			free(buffer);
-		return (NULL);
-	}
-	buffer = ft_read_file(fd, buffer);
-	if (!buffer)
-		return (NULL);
-
-	// Check for both newline and end of file
-	if (*buffer || buffer[ft_strlenni(buffer)] != '\n')
-	{
-		line = ft_getline(buffer);
-		if (!line)
-		{
-			free(buffer);
-			buffer = NULL;
-			return (NULL);
-		}
-		buffer = ft_next_spot(buffer);
-		return (line);
-	}
-	free(buffer);
-	buffer = NULL;
-	return (NULL);
-}
-
-
-/*
 
 
 	title("files/41_no_nl: ")
