@@ -75,8 +75,12 @@ static char	*ft_getline(char *s_buffer)
 		line[i] = s_buffer[i];
 		i++;
 	}
-	if (s_buffer[i] && s_buffer[i] == '\n')
+	if (s_buffer[i] && s_buffer[i] == '\n'){
 		line[i++] = '\n';
+	}else{
+		line[i] = '\0';
+	}
+	//printf("here --> %s\n", line);
 	return (line);
 }
 
@@ -128,11 +132,12 @@ char	*get_next_line(int fd)
 {
 	static char		*buffer;
 	char			*line;
+	//static int i = 0;
 
+	//printf("filed --> %d\n", fd);
 	line = NULL;
 	if ((fd < 0 || BUFFER_SIZE <= 0) || read(fd, 0, 0) < 0)
 	{
-		//printf("should\n");
 		if (buffer)
 			free(buffer);
 		return (NULL);
@@ -141,6 +146,7 @@ char	*get_next_line(int fd)
 	if (!buffer)
 		return (NULL);
 	line = ft_getline(buffer);
+	//printf("line%d --> %s\n", i++, line);
 	if (!line)
 	{
 		if (buffer)
@@ -151,7 +157,6 @@ char	*get_next_line(int fd)
 		return (NULL);
 	}
 	buffer = ft_next_spot(buffer);
-		//printf("hhh\n");
 	return (line);
 }
 
@@ -163,15 +168,66 @@ int main(int ac, char **av)
     char *line;
 
     line = NULL;
+		line = get_next_line(fd);
+		printf("line 1 a  --> %s\n", line);
+		 line = get_next_line(fd);   //"bbbbbbbbbb\n""aaaaaaaaaa\n"
+		printf("line 2 b --> %s\n", line);
+		// set the next read call to return -1
+		if (BUFFER_SIZE > 100) {
+			char *temp;
+			do {
+				temp = get_next_line(fd);
+				printf("temp --> %s\n", temp);
+				free(temp);
+			} while (temp != NULL);
+		}
+		/ line = get_next_line(fd); // NULL
+		printf("line 3 null b --> %s\n", line);
+		close(fd);
+		free(line);
+		fd = open(av[1], O_RDONLY);
+		line = get_next_line(fd);  //"aaaaaaaaaa\n""bbbbbbbbbb\n""cccccccccc\n" "dddddddddd\n"
+		printf("line  4 a --> %s\n", line);
+		 line = get_next_line(fd);
+		printf("line 5 b  --> %s\n", line);
+		 line = get_next_line(fd);
+		printf("line --> %s\n", line);
+		 line = get_next_line(fd);
+		printf("line --> %s\n", line);
+		 line = get_next_line(fd); // NULL
+		printf("line --> %s\n", line);
+
+
    //  line = get_next_line(fd);
   //  write(1, line, ft_strlenni(line));
 
-   line = get_next_line(fd);
-	 write(1, line, ft_strlenni(line));
-	 if (!line)
-	 	printf("got\n");
+
+
+
+   //line = get_next_line(fd);
+	// write(1, line, ft_strlenni(line));
 	   line = get_next_line(fd);
-	 write(1, line, ft_strlenni(line));
+	   printf("%s", line );
+	     line = get_next_line(fd);
+	   printf("%s", line );
+	      line = get_next_line(fd);
+	   printf("%s", line );
+	      line = get_next_line(fd);
+	  printf("%s", line );
+	 line = get_next_line(fd);
+	   printf("%s", line );
+	  
+	  
+	  // line = get_next_line(fd);
+
+	 //  if (!line)
+	   //	printf("cor");
+	   // line = get_next_line(fd);
+		//if (!line)
+			//printf("correct\n");
+	  // printf("char n --> %d", *(line + ft_strlenni(line) - 1));
+	 //   printf("char last --> %c", *(line + ft_strlenni(line) - 2));
+	// write(1, line, ft_strlenni(line));
 	 //   line = get_next_line(fd);
 	// write(1, line, ft_strlenni(line));
 	 //   line = get_next_line(fd);
@@ -189,7 +245,6 @@ int main(int ac, char **av)
     //write(1, line, ft_strlenni(line));
     return 0;
 }
-
 
 
 	title("files/41_no_nl: ")
