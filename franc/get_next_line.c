@@ -6,7 +6,7 @@
 /*   By: apyykone <apyykone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 16:03:05 by apyykone          #+#    #+#             */
-/*   Updated: 2023/11/13 13:40:42 by apyykone         ###   ########.fr       */
+/*   Updated: 2023/11/15 23:33:25 by apyykone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static char *ft_next_spot(char *buffer)
 
 	i = 0;
 	j = 0;
-	newline = NULL;
 	while (buffer[i] && buffer[i] != '\n')
 		i++;
 	if (!buffer[i])
@@ -43,7 +42,6 @@ static char *ft_next_spot(char *buffer)
 			free(buffer);
 		return (NULL);
 	}
-
 	line_size = ft_strlenni(buffer) - i + 1;
 	newline = malloc(line_size * sizeof(char) + 1);
 	if (!newline)
@@ -131,25 +129,20 @@ static char *ft_read_file(int fd, char *s_buffer)
 	free(read_buffer);
 	return (s_buffer);
 }
-#include <string.h>
+
 char *get_next_line(int fd)
 {
 	static char *buffer;
 	char *line;
 
-	if ((fd < 0 || BUFFER_SIZE <= 0))
-		return (NULL);
-	if (read(fd, 0, 0) < 0)
+	line = NULL;
+	if ((fd < 0 || BUFFER_SIZE <= 0) || read(fd, 0, 0) < 0)
 	{
-		free(buffer);
-		buffer = 0;
+		if (buffer)
+			free(buffer);
 		return (NULL);
 	}
-
-	line = NULL;
-
 	buffer = ft_read_file(fd, buffer);
-
 	if (!buffer)
 		return (NULL);
 	line = ft_getline(buffer);
@@ -165,28 +158,3 @@ char *get_next_line(int fd)
 	buffer = ft_next_spot(buffer);
 	return (line);
 }
-/*
-#include "get_next_line.h"
-#include <fcntl.h>
-#include <stdio.h>
-
-int main(void)
-{
-	int fd;
-	char *line;
-
-	// Open a file with one character
-	fd = open("1char.txt", O_RDONLY);
-	if (fd == -1)
-	{
-		perror("Error opening file");
-		return 1;
-	}
-	line = get_next_line(fd);
-	printf("Line: %s\n", line);
-	// Close the file descriptor
-	close(fd);
-
-	return 0;
-}
-*/
