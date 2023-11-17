@@ -12,9 +12,9 @@
 
 #include "get_next_line.h"
 
-size_t  slen(char *s)
+size_t slen(char *s)
 {
-    size_t  len;
+    size_t len;
 
     len = 0;
     while (s[len])
@@ -22,10 +22,10 @@ size_t  slen(char *s)
     return (len);
 }
 
-char    *join_free(char *tmp, char *bf)
+char *join_free(char *tmp, char *bf)
 {
-    char        *join;
-    ssize_t     ti;
+    char *join;
+    ssize_t ti;
 
     if (!tmp)
     {
@@ -46,14 +46,15 @@ char    *join_free(char *tmp, char *bf)
             join[ti++] = *bf++;
         join[ti] = '\0';
     }
-    free(tmp);
+    if (tmp)
+        free(tmp);
     tmp = 0;
     return (join);
 }
 
 ssize_t find_nl(char *str)
 {
-    ssize_t     idx;
+    ssize_t idx;
 
     idx = 0;
     while (str[idx])
