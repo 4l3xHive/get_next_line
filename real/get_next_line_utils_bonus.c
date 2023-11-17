@@ -12,7 +12,7 @@
 
 #include "get_next_line_bonus.h"
 
-size_t	slen(char *s)
+size_t	slen_b(char *s)
 {
 	size_t		len;
 
@@ -22,7 +22,7 @@ size_t	slen(char *s)
 	return (len);
 }
 
-static void	join_buffs(char *join, char *tmp, char *bf)
+static void	join_buffs_b(char *join, char *tmp, char *bf)
 {
 	ssize_t			ti;
 
@@ -37,7 +37,7 @@ static void	join_buffs(char *join, char *tmp, char *bf)
 	}
 }
 
-char	*join_free(char *tmp, char *bf)
+char	*join_free_b(char *tmp, char *bf)
 {
 	char			*join;
 	size_t			total_len;
@@ -51,7 +51,7 @@ char	*join_free(char *tmp, char *bf)
 	}
 	if (!bf)
 		return (tmp);
-	total_len = slen(tmp) + slen(bf) + 1;
+	total_len = slen_b(tmp) + slen_b(bf) + 1;
 	join = (char *)malloc((total_len));
 	if (!join)
 	{
@@ -60,13 +60,13 @@ char	*join_free(char *tmp, char *bf)
 		return (NULL);
 	}
 	if (join)
-		join_buffs(join, tmp, bf);
+		join_buffs_b(join, tmp, bf);
 	free(tmp);
 	tmp = 0;
 	return (join);
 }
 
-ssize_t	find_nl(char *str)
+ssize_t	find_nl_b(char *str)
 {
 	ssize_t		idx;
 
