@@ -17,7 +17,6 @@
 # endif
 # include <stdlib.h>
 # include <unistd.h>
-# include <fcntl.h>
 
 char		*join_free(char *tmp, char *bf);
 size_t		slen(char *s);

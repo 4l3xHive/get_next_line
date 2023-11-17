@@ -12,11 +12,10 @@
 
 #include "get_next_line.h"
 
-// If Newlinefound join and break else keep joining
-static char *read_file(int fd, char *s_buffer)
+static char	*read_file(int fd, char *s_buffer)
 {
-	char buffer[BUFFER_SIZE + 1];
-	int bytes_read;
+	char	buffer[BUFFER_SIZE + 1];
+	int		bytes_read;
 
 	bytes_read = 0;
 	while (1)
@@ -25,22 +24,23 @@ static char *read_file(int fd, char *s_buffer)
 		if (bytes_read < 0)
 			return (NULL);
 		else if (bytes_read == 0)
-			break;
+			break ;
 
 		buffer[bytes_read] = '\0';
 		s_buffer = join_free(s_buffer, buffer);
-
+		if (!s_buffer)
+			return (NULL);
 		if (find_nl(buffer) != -1)
-			break;
+			break ;
 	}
 
-	return s_buffer;
+	return (s_buffer);
 }
 
-static char *next_spot(char *tmp)
+static char	*next_spot(char *tmp)
 {
-	ssize_t i;
-	char *new_tmp;
+	ssize_t	i;
+	char	*new_tmp;
 
 	if (((tmp) == 0 && tmp[1] == 0) || find_nl(tmp) == -1)
 	{
@@ -66,13 +66,13 @@ static char *next_spot(char *tmp)
 	return (new_tmp);
 }
 
-static char *get_line(char **s_buff)
+static char	*get_line(char **s_buff)
 {
-	char *next_line;
-	ssize_t i;
-	ssize_t s_i;
-	size_t size;
-	char *temp;
+	char		*next_line;
+	ssize_t		i;
+	ssize_t		s_i;
+	size_t		size;
+	char		*temp;
 
 	i = -1;
 	size = 0;
@@ -95,10 +95,10 @@ static char *get_line(char **s_buff)
 	return (next_line);
 }
 
-char *get_next_line(int fd)
+char	*get_next_line(int fd)
 {
-	static char *s_buffer;
-	char *next_line;
+	static char	*s_buffer;
+	char		*next_line;
 
 	if ((fd < 0 || BUFFER_SIZE <= 0))
 		return (NULL);
@@ -111,11 +111,7 @@ char *get_next_line(int fd)
 	}
 	s_buffer = read_file(fd, s_buffer);
 	if (!s_buffer)
-	{
-		free(s_buffer);
-		s_buffer = 0;
 		return (NULL);
-	}
 	next_line = get_line(&s_buffer);
 	if (!next_line && s_buffer)
 	{
@@ -124,27 +120,3 @@ char *get_next_line(int fd)
 	}
 	return (next_line);
 }
-/*
-#include <stdio.h>
-#include <fcntl.h>
-int main(int ac, char **av)
-{
-	int fd = open(av[1], O_RDONLY);
-	char *line;
-
-	while ((line = get_next_line(fd)))
-		printf("%s", line);
-
-	TEST("giant_line_nl.txt", {
-		int fd = open(_title, O_RDONLY);
-		char expected[20000 + 2];
-		populate_expected(expected, 20000);
-		expected[20000] = '\n';
-		expected[20001] = 0;
-		test_gnl(fd, expected);
-		test_gnl(fd, "another line!!!");
-		test_gnl(fd, NULL);
-	});
-
-	return 0;
-}*/
