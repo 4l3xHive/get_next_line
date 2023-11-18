@@ -25,14 +25,16 @@ size_t	slen_b(char *s)
 static void	join_buffs_b(char *join, char *tmp, char *bf)
 {
 	ssize_t			ti;
+	ssize_t			bf_i;
 
 	if (join)
 	{
 		ti = -1;
+		bf_i = 0;
 		while (tmp[++ti])
 			join[ti] = tmp[ti];
-		while (*bf)
-			join[ti++] = *bf++;
+		while (bf[bf_i])
+			join[ti++] = bf[bf_i++];
 		join[ti] = '\0';
 	}
 }
@@ -59,8 +61,7 @@ char	*join_free_b(char *tmp, char *bf)
 			free(tmp);
 		return (NULL);
 	}
-	if (join)
-		join_buffs_b(join, tmp, bf);
+	join_buffs_b(join, tmp, bf);
 	free(tmp);
 	tmp = 0;
 	return (join);

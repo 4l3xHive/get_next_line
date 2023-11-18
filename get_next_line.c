@@ -6,7 +6,7 @@
 /*   By: apyykone <apyykone@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/09 16:03:05 by apyykone          #+#    #+#             */
-/*   Updated: 2023/11/16 19:45:20 by apyykone         ###   ########.fr       */
+/*   Updated: 2023/11/17 14:55:05 by apyykone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ static char	*read_file(int fd, char *s_buffer)
 			return (NULL);
 		else if (bytes_read == 0)
 			break ;
-
 		buffer[bytes_read] = '\0';
 		s_buffer = join_free(s_buffer, buffer);
 		if (!s_buffer)
@@ -33,7 +32,6 @@ static char	*read_file(int fd, char *s_buffer)
 		if (find_nl(buffer) != -1)
 			break ;
 	}
-
 	return (s_buffer);
 }
 

@@ -55,12 +55,10 @@ char	*join_free(char *tmp, char *bf)
 	join = (char *)malloc((total_len));
 	if (!join)
 	{
-		if (tmp)
-			free(tmp);
+		free(tmp);
 		return (NULL);
 	}
-	if (join)
-		join_buffs(join, tmp, bf);
+	join_buffs(join, tmp, bf);
 	free(tmp);
 	tmp = 0;
 	return (join);
